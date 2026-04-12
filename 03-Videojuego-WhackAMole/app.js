@@ -43,6 +43,8 @@ const textoFinal = document.querySelector("#texto-final");
 // ============================================================
 function cargarHighScore() {
   // TU CÓDIGO AQUÍ 👇
+  const highScore = localStorage.getItem("whack-highscore");
+  displayHighScore.textContent = highScore !== null ? highScore : "0";
 }
 
 // ============================================================
@@ -59,7 +61,15 @@ function cargarHighScore() {
 // ============================================================
 function actualizarHighScore() {
   // TU CÓDIGO AQUÍ 👇
-}
+  const highScore = localStorage.getItem("whack-highscore");
+
+  if (puntaje > Number (highScore)) {
+    localStorage.setItem("whack-highscore", puntaje);
+    displayHighScore.textContent = puntaje;
+    return true;
+  };
+  return false;
+};
 
 // ============================================================
 // PASO 3 — Elegir un hoyo al azar
@@ -74,7 +84,10 @@ function actualizarHighScore() {
 // ============================================================
 function hoyoAleatorio() {
   // TU CÓDIGO AQUÍ 👇
-}
+  const aleatorio = Math.floor(Math.random() * hoyos.length);
+
+  return hoyos[aleatorio];
+};
 
 // ============================================================
 // PASO 4 — Hacer aparecer un topo
@@ -95,7 +108,21 @@ function hoyoAleatorio() {
 // ============================================================
 function mostrarTopo() {
   // TU CÓDIGO AQUÍ 👇
-}
+  
+  if (hoyoActivo !== null) {
+    hoyoActivo.classList.remove("visible");
+  };
+  
+  hoyoActivo = hoyoAleatorio();
+
+  hoyoActivo.classList.add("visible");
+
+  setTimeout(() => {
+    if (hoyoActivo !== null) {
+      hoyoActivo.classList.remove("visible");
+    };
+  },800)
+};
 
 // ============================================================
 // PASO 5 — Detectar el golpe al topo
@@ -114,6 +141,23 @@ function mostrarTopo() {
 // ============================================================
 function golpearTopo(evento) {
   // TU CÓDIGO AQUÍ 👇
+  if (!juegoActivo) return;
+
+  const hoyo = evento.currentTarget;
+
+  if (!hoyo.classList.contains("visible")) return;
+
+  puntaje++;
+  displayPuntaje.textContent = puntaje;
+
+  hoyoActivo.classList.remove("visible");
+  hoyoActivo.classList.add("golpeado");
+
+  setTimeout(() => {
+    hoyo.classList.remove("golpeado");
+  },300)
+
+  hoyoActivo = null;
 }
 
 // ============================================================
@@ -137,7 +181,24 @@ function golpearTopo(evento) {
 // ============================================================
 function iniciarPartida() {
   // TU CÓDIGO AQUÍ 👇
-}
+  puntaje = 0;
+  tiempoRestante = 30;
+  juegoActivo = true;
+
+  displayPuntaje.textContent = puntaje;
+  displayTiempo.textContent = tiempoRestante;
+  mensajeFinal.classList.add("oculto");
+
+  btnIniciar.disabled = true;
+
+  intervaloTopo = setInterval(mostrarTopo,900);
+
+  intervaloTimer = setInterval(() => {
+    tiempoRestante--;
+    displayTiempo.textContent = tiempoRestante;
+    if (tiempoRestante === 0) return terminarPartida();
+  },1000);
+};
 
 // ============================================================
 // PASO 7 — Terminar la partida
@@ -157,7 +218,31 @@ function iniciarPartida() {
 // ============================================================
 function terminarPartida() {
   // TU CÓDIGO AQUÍ 👇
+  juegoActivo = false;
+
+ clearInterval(intervaloTopo);
+ clearInterval(intervaloTimer);
+
+ if (hoyoActivo !== null) {
+  hoyoActivo.classList.remove("visible");
+  hoyoActivo = null;
+ };
+
+ const score = actualizarHighScore();
+
+ //if (score === true) return textoFinal.textContent = "Felicidades tienes un nuevo Record!!!";
+if (score) {
+  textoFinal.textContent = "Felicidades has superado el Record!!!";
+} else {
+  textoFinal.textContent = "Fin del juego";
 }
+
+mensajeFinal.classList.remove("oculto");
+ mensajeFinal.classList.remove("oculto");
+
+ btnIniciar.disabled = false;
+ btnIniciar.textContent = "🔄 Jugar de nuevo";
+};
 
 // ============================================================
 // PASO 8 — Conectar los eventos
@@ -173,7 +258,11 @@ function terminarPartida() {
 // ============================================================
 
 // TU CÓDIGO AQUÍ 👇
+  btnIniciar.addEventListener("click", iniciarPartida);
 
+  hoyos.forEach(hoyo => {
+    hoyo.addEventListener("click",golpearTopo);
+  });
 // ============================================================
 // 🚀 ARRANQUE — Ya está escrito, no lo toques
 // ============================================================
