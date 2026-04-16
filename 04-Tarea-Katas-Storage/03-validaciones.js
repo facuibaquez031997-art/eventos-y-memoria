@@ -12,7 +12,8 @@
 -------------------------------------------------------------------------- */
 function limpiarInput(str) {
   // TU CÓDIGO AQUÍ 👇
-}
+   return str.trim().toLowerCase();
+};
 
 /* --------------------------------------------------------------------------
    KATA 2 — esEmailValido
@@ -21,6 +22,7 @@ function limpiarInput(str) {
 -------------------------------------------------------------------------- */
 function esEmailValido(email) {
   // TU CÓDIGO AQUÍ 👇
+  return email.includes("@") && email.includes(".");
 }
 
 /* --------------------------------------------------------------------------
@@ -30,6 +32,7 @@ function esEmailValido(email) {
 -------------------------------------------------------------------------- */
 function esPasswordLarga(pass) {
   // TU CÓDIGO AQUÍ 👇
+  return pass.length >= 8;
 }
 
 /* --------------------------------------------------------------------------
@@ -40,6 +43,7 @@ function esPasswordLarga(pass) {
 -------------------------------------------------------------------------- */
 function slugify(titulo) {
   // TU CÓDIGO AQUÍ 👇
+  return titulo.toLowerCase().replace(/ /g, "-");
 }
 
 /* --------------------------------------------------------------------------
@@ -49,6 +53,7 @@ function slugify(titulo) {
 -------------------------------------------------------------------------- */
 function extraerId(str) {
   // TU CÓDIGO AQUÍ 👇
+  return parseInt(str.split("-")[1]);
 }
 
 /* --------------------------------------------------------------------------
@@ -59,6 +64,9 @@ function extraerId(str) {
 -------------------------------------------------------------------------- */
 function mascararTarjeta(num) {
   // TU CÓDIGO AQUÍ 👇
+  const ultimos4 = num.slice(-4);
+  const mascarado = "*".repeat(num.length - 4);
+  return mascarado + ultimos4;
 }
 
 /* --------------------------------------------------------------------------
@@ -68,6 +76,11 @@ function mascararTarjeta(num) {
 -------------------------------------------------------------------------- */
 function soloNumeros(str) {
   // TU CÓDIGO AQUÍ 👇
+  return str.replace(/\D/g, "");// /\D/ => indica a js que cualquier parametro que no sea un digito. 
+  // /\d/ => indica a js que cualquier parametro que sea un digito. 
+  // g => global, indica que se reemplacen todas las coincidencias, no solo que se detenga en la primera. 
+  // "" => reeemplaza cada coincidencia con un string vacio, las elimina. 
+  // estas son Expresiones Regulares.
 }
 
 /* --------------------------------------------------------------------------
@@ -77,6 +90,8 @@ function soloNumeros(str) {
 -------------------------------------------------------------------------- */
 function capitalizar(str) {
   // TU CÓDIGO AQUÍ 👇
+   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
 }
 
 /* --------------------------------------------------------------------------
@@ -87,6 +102,10 @@ function capitalizar(str) {
 -------------------------------------------------------------------------- */
 function limitarTexto(str, limit) {
   // TU CÓDIGO AQUÍ 👇
+  if (str.length > limit) {
+    return str.slice(0, limit) + "...";
+  }
+  return str;
 }
 
 /* --------------------------------------------------------------------------
@@ -96,6 +115,7 @@ function limitarTexto(str, limit) {
 -------------------------------------------------------------------------- */
 function obtenerExtension(file) {
   // TU CÓDIGO AQUÍ 👇
+  return file.split(".").pop();
 }
 
 // 🚨 ¡NO TOCAR! Exportación para los tests
