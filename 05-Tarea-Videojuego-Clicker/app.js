@@ -30,6 +30,9 @@ function cargarPartida() {
   //      Ej: parseInt(localStorage.getItem('monedas')) || 0
   // -------------------------------------------------
   // TU CÓDIGO AQUÍ 👇
+  monedas = parseInt(localStorage.getItem("monedas")) || 0;
+  mineros = parseInt(localStorage.getItem("mineros")) || 0;
+  costoMinero = parseInt(localStorage.getItem("costoMinero")) || 10;
 
   // Actualizamos la pantalla con los datos cargados
   actualizarPantalla();
@@ -43,6 +46,9 @@ function guardarPartida() {
   //      Usá el mismo nombre de clave que usaste en la Tarea 1 para leerlas.
   // -------------------------------------------------
   // TU CÓDIGO AQUÍ 👇
+  localStorage.setItem("monedas", monedas);
+  localStorage.setItem("mineros", mineros);
+  localStorage.setItem("costoMinero", costoMinero);
 }
 
 function actualizarPantalla() {
@@ -73,6 +79,9 @@ function actualizarPantalla() {
 // -------------------------------------------------
 btnMinar.addEventListener("click", () => {
   // TU CÓDIGO AQUÍ 👇
+  monedas = monedas + 1;
+  guardarPartida();
+  actualizarPantalla();
 });
 
 // 📝 TAREA 4: Evento para comprar un Minero
@@ -86,6 +95,14 @@ btnMinar.addEventListener("click", () => {
 // -------------------------------------------------
 btnComprarMinero.addEventListener("click", () => {
   // TU CÓDIGO AQUÍ 👇
+  if (monedas >= costoMinero) {
+    monedas = monedas - costoMinero;
+    mineros = mineros + 1;
+    costoMinero = Math.floor(costoMinero *1.5);
+  };
+
+  guardarPartida();
+  actualizarPantalla();
 });
 
 // Evento para borrar todo (Modo Dios)
@@ -113,7 +130,14 @@ btnReset.addEventListener("click", () => {
 //   3. Llamá a guardarPartida() y actualizarPantalla().
 // -------------------------------------------------
 // TU CÓDIGO AQUÍ 👇
-
+setInterval(() => {
+  if (mineros > 0) {
+    monedas = monedas + mineros;
+    guardarPartida();
+    actualizarPantalla();
+  }
+},1000);
+clearInterval()
 // ==========================================================================
 // ¡ARRANQUE!
 // ==========================================================================
